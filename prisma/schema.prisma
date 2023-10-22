@@ -62,6 +62,10 @@ model User {
     accounts      Account[]
     sessions      Session[]
     posts         Post[]
+    pies          Pie[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
 
 model VerificationToken {
@@ -70,4 +74,26 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Pie {
+    id      String  @id @default(cuid())
+    name    String?
+    owner   User    @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+    ownerId String
+    slices  Slice[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Slice {
+    id          String  @id @default(cuid())
+    name        String
+    description String?
+    pieId       String
+    pie         Pie     @relation(fields: [pieId], references: [id], onDelete: Cascade)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
