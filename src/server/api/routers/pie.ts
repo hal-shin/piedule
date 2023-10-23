@@ -1,30 +1,42 @@
-import { z } from "zod";
-
-import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import { z } from 'zod';
+import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc';
+import { createPieInput } from '@/types/pie';
 
 export const pieRouter = createTRPCRouter({
   create: protectedProcedure
-    .input(z.object({ name: z.string().min(1) }))
+    .input(createPieInput)
     .mutation(async ({ ctx, input }) => {
       // simulate a slow db call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      return ctx.db.post.create({
+      return ctx.db.pie.create({
         data: {
           name: input.name,
-          createdBy: { connect: { id: ctx.session.user.id } },
+
+          owner: {
+            connect: {
+              id: ctx.session.user.id,
+            },
+          },
         },
       });
     }),
 
   getLatest: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.post.findFirst({
-      orderBy: { createdAt: "desc" },
-      where: { createdBy: { id: ctx.session.user.id } },
+    return ctx.db.pie.findFirst({
+      orderBy: {
+        createdAt: 'desc',
+      },
+      where: {
+        owner: {
+          id: ctx.session.user.id,
+        },
+      },
     });
   }),
 
-  getSecretMessage: protectedProcedure.query(() => {
-    return "you can now see this secret message!";
+  getAll: protectedProcedure.query(({ ctx }) => {
+    return ctx.db.pie.findMany({
+      where: { owner: ctx.session.user },
+    });
   }),
 });

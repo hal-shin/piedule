@@ -85,14 +85,21 @@ model Pie {
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    @@index([ownerId])
 }
 
 model Slice {
     id          String  @id @default(cuid())
     name        String
     description String?
-    pieId       String
-    pie         Pie     @relation(fields: [pieId], references: [id], onDelete: Cascade)
+    color       String?
+
+    start String
+    end   String
+
+    pieId String
+    pie   Pie    @relation(fields: [pieId], references: [id], onDelete: Cascade)
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
