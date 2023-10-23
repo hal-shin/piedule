@@ -10,3 +10,7 @@ export const convertTimeToNum = (time: string) => {
 
   return hourInt + parseFloat(minutes) / 60;
 };
+
+export const convertNumToTime = (num: number) => {
+  return num.toString().padStart(2, '0') + ':00';
+};
