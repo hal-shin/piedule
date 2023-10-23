@@ -5,7 +5,7 @@ module.exports = {
     'prettier-plugin-tailwindcss',
     '@ianvs/prettier-plugin-sort-imports',
   ],
-  printWidth: 80,
+  printWidth: 45,
   tabWidth: 2,
   trailingComma: 'all',
   singleQuote: true,

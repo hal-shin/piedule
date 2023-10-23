@@ -1,25 +1,21 @@
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import React from 'react';
-import {
-  Cell,
-  LabelList,
-  Pie,
-  PieChart,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-} from 'recharts';
 import { Clock } from '@/components/Clock';
 import { api } from '@/utils/api';
 
 export default function Dashboard() {
+  const { data } = useSession();
   return (
-    <div>
+    <>
       <h1>Dashboard</h1>
       <Link href="/dashboard/schedule/create">Create Pie</Link>
 
+      <p>Is auth: {data?.user?.name || 'Not authed.'}</p>
+
       <h2>Schedules</h2>
       <Schedules />
-    </div>
+    </>
   );
 }
 

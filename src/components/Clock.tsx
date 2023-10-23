@@ -26,7 +26,6 @@ export const Clock = ({ data, size }: ClockProps) => {
     let count = 0;
 
     while (count !== MAX) {
-      console.log('Count:', count);
       if (slices.length && slices[0]) {
         const nextSliceTime = convertTimeToNum(slices[0].start);
 
@@ -36,7 +35,6 @@ export const Clock = ({ data, size }: ClockProps) => {
           if (!currentSlice) throw new Error('No current slice!');
           const start = convertTimeToNum(currentSlice.start);
           const end = convertTimeToNum(currentSlice.end);
-          console.log(currentSlice.name, start, end);
           output.push({ ...currentSlice, value: end - count });
           count += end - start;
         } else {
@@ -56,25 +54,19 @@ export const Clock = ({ data, size }: ClockProps) => {
     return output;
   }, [data]);
 
-  console.log('dataWithBlanks:', dataWithBlanks);
-
-  const renderCustomizedLabel = ({
-    cx,
-    cy,
-    midAngle,
-    innerRadius,
-    outerRadius,
-    percent,
-    index,
-  }: {
-    cx: number;
-    cy: number;
-    midAngle: number;
-    innerRadius: number;
-    outerRadius: number;
-    percent: number;
-    index: number;
-  }) => {
+  const renderCustomizedLabel = (
+    props: {
+      cx: number;
+      cy: number;
+      midAngle: number;
+      innerRadius: number;
+      outerRadius: number;
+      percent: number;
+      index: number;
+    } & Slice,
+  ) => {
+    const { cx, cy, midAngle, innerRadius, outerRadius, percent, index, name } =
+      props;
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
@@ -109,7 +101,13 @@ export const Clock = ({ data, size }: ClockProps) => {
         labelLine={false}
       >
         {dataWithBlanks.map((entry, index) => (
-          <Cell key={`cell-${index}`} fill={entry.color} />
+          <Cell
+            key={`cell-${index}`}
+            fill={entry.color}
+            onClick={() => {
+              console.log('Clicked:', entry);
+            }}
+          />
         ))}
       </Pie>
       {/*{needle(value, data, cx, cy, iR, oR, '#d0d000')}*/}

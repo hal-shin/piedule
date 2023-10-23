@@ -32,7 +32,7 @@ export default function Create() {
   };
 
   return (
-    <div>
+    <>
       <h1>Create New Schedule</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <input {...register('name')} />
@@ -40,6 +40,6 @@ export default function Create() {
 
         <input type="submit" />
       </form>
-    </div>
+    </>
   );
 }
