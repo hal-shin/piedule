@@ -3,7 +3,11 @@ import { SessionProvider } from 'next-auth/react';
 import { type AppType } from 'next/app';
 import { api } from '@/utils/api';
 import '@/styles/globals.css';
-import { Toaster } from 'react-hot-toast';
+import { ChakraProvider, Flex } from '@chakra-ui/react';
+import { Footer } from '@/components/Layout/Footer';
+import { Navbar } from '@/components/Layout/Navbar';
+import { NAVBAR_HEIGHT } from '@/constants';
+import { theme } from '@/theme';
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -11,8 +15,13 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <Component {...pageProps} />
-      <Toaster />
+      <ChakraProvider theme={theme}>
+        <Navbar />
+        <Flex as="main" minHeight="100vh" pt={NAVBAR_HEIGHT + 'px'}>
+          <Component {...pageProps} />
+        </Flex>
+        <Footer />
+      </ChakraProvider>
     </SessionProvider>
   );
 };

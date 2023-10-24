@@ -1,3 +1,4 @@
+import { Button, Input, Text } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -35,10 +36,10 @@ export default function Create() {
     <>
       <h1>Create New Schedule</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <input {...register('name')} />
-        <p>{errors.name?.message}</p>
+        <Input {...register('name')} />
+        <Text>{errors.name?.message}</Text>
 
-        <input type="submit" />
+        <Button type="submit" />
       </form>
     </>
   );

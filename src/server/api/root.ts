@@ -1,5 +1,6 @@
 import { pieRouter } from '@/server/api/routers/pie';
 import { postRouter } from '@/server/api/routers/post';
+import { sliceRouter } from '@/server/api/routers/slice';
 import { createTRPCRouter } from '@/server/api/trpc';
 
 /**
@@ -10,6 +11,7 @@ import { createTRPCRouter } from '@/server/api/trpc';
 export const appRouter = createTRPCRouter({
   post: postRouter,
   pie: pieRouter,
+  slice: sliceRouter,
 });
 
 // export type definition of API

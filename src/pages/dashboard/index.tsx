@@ -1,43 +1,55 @@
-import { useSession } from 'next-auth/react';
-import Link from 'next/link';
+import { Link } from '@chakra-ui/next-js';
+import {
+  Button,
+  Container,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+} from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { Clock } from '@/components/Clock';
-import { DashboardLayout } from '@/components/Layout';
 import { api } from '@/utils/api';
 
 export default function Dashboard() {
-  const { data } = useSession();
-  return (
-    <DashboardLayout>
-      <h1>Dashboard</h1>
-      <Link href="/dashboard/schedule/create">Create Pie</Link>
-
-      <p>Is auth: {data?.user?.name || 'Not authed.'}</p>
-
-      <h2>Schedules</h2>
-      <Schedules />
-    </DashboardLayout>
-  );
-}
-
-const Schedules = () => {
+  const router = useRouter();
   const pies = api.pie.getAll.useQuery();
 
-  if (!pies.data) return null;
-
-  return pies.data.map((pie) => (
-    <div key={`pie-${pie.id}`}>
-      <p>{pie.name}</p>
-
-      <Clock
-        name={pie.name}
-        data={[
-          { name: 'A', start: '08:00', end: '12:30', color: '#ff0000' },
-          // { name: 'B', value: 4, color: '#00ff00' },
-          // { name: 'C', value: 4, color: '#0000ff' },
-          { name: 'C', start: '14:00', end: '16:00', color: '#eaeaea' },
-        ]}
-      />
-    </div>
-  ));
-};
+  return (
+    <Container border="1px solid red" maxW="container.lg">
+      <Tabs variant="soft-rounded" colorScheme="green">
+        <TabList>
+          {pies.data?.map((pie) => (
+            <Tab key={`pie-tab-${pie.id}`}>{pie.name}</Tab>
+          ))}
+          <Tab>Test</Tab>
+          <Button
+            as={Link}
+            href="/dashboard/schedules/create"
+            variant="ghost"
+            colorScheme="green"
+            style={{ textDecoration: 'none' }}
+          >
+            + Add New
+          </Button>
+        </TabList>
+        <TabPanels>
+          {pies.data?.map((pie) => (
+            <TabPanel key={`pie-${pie.id}`}>
+              <Clock name={pie.name} data={pie.slices} />
+              <Button
+                as={Link}
+                href={`/dashboard/schedules/${pie.id}/slice/create`}
+                style={{ textDecoration: 'none' }}
+              >
+                Add Time Slice
+              </Button>
+            </TabPanel>
+          ))}
+        </TabPanels>
+      </Tabs>
+    </Container>
+  );
+}

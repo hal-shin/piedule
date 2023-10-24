@@ -1,6 +1,6 @@
+import { type Slice } from '@prisma/client';
 import React, { useCallback, useMemo } from 'react';
 import { Cell, Label, Pie, PieChart, Tooltip } from 'recharts';
-import { type Slice } from '@/types/slice';
 import { convertNumToTime, convertTimeToNum } from '@/utils/time';
 
 const UNSCHEDULED_COLOR = 'lightgray';
@@ -56,7 +56,6 @@ export const Clock = ({ data, name }: ClockProps) => {
         x={x}
         y={y}
         fill="black"
-        // textAnchor={x > cx ? 'start' : 'end'}
         textAnchor={isSideValue ? (x > cx ? 'start' : 'end') : 'middle'}
         dominantBaseline={
           isSideValue ? 'central' : isBottomValue ? 'hanging' : 'text-bottom'

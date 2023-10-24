@@ -1,5 +1,4 @@
 import { TRPCError } from '@trpc/server';
-import { z } from 'zod';
 import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc';
 import { createSliceInput, getSlices } from '@/types/slice';
 
@@ -7,7 +6,6 @@ export const sliceRouter = createTRPCRouter({
   create: protectedProcedure
     .input(createSliceInput)
     .mutation(async ({ ctx, input }) => {
-      // simulate a slow db call
       const pie = await ctx.db.pie.findFirstOrThrow({
         where: {
           id: input.pieId,
@@ -27,8 +25,8 @@ export const sliceRouter = createTRPCRouter({
       return ctx.db.slice.create({
         data: {
           name: input.name,
-          startTime: input.startTime,
-          endTime: input.endTime,
+          start: input.start,
+          end: input.end,
           pie: {
             connect: {
               id: pie.id,

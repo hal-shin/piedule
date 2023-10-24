@@ -37,6 +37,9 @@ export const pieRouter = createTRPCRouter({
   getAll: protectedProcedure.query(({ ctx }) => {
     return ctx.db.pie.findMany({
       where: { owner: ctx.session.user },
+      include: {
+        slices: true,
+      },
     });
   }),
 });
