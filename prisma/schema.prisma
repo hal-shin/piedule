@@ -78,7 +78,7 @@ model VerificationToken {
 
 model Pie {
     id      String  @id @default(cuid())
-    name    String?
+    name    String
     owner   User    @relation(fields: [ownerId], references: [id], onDelete: Cascade)
     ownerId String
     slices  Slice[]

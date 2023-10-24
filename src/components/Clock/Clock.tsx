@@ -1,6 +1,5 @@
-import React, { useCallback, useMemo, useState } from 'react';
-import { Cell, LabelList, Pie, PieChart, type PieLabel } from 'recharts';
-import { ContentType } from 'recharts/types/component/Label';
+import React, { useCallback, useMemo } from 'react';
+import { Cell, Label, Pie, PieChart, Tooltip } from 'recharts';
 import { type Slice } from '@/types/slice';
 import { convertNumToTime, convertTimeToNum } from '@/utils/time';
 
@@ -14,13 +13,12 @@ const PIE_CONFIG = {
 };
 
 interface ClockProps {
+  name: string;
   data: Array<Slice>;
   size?: number;
 }
 
-export const Clock = ({ data }: ClockProps) => {
-  const [active, setActive] = useState(9999);
-
+export const Clock = ({ data, name }: ClockProps) => {
   const createBlank = (duration: number) => {
     return {
       value: duration,
@@ -33,31 +31,36 @@ export const Clock = ({ data }: ClockProps) => {
     props: {
       cx: number;
       cy: number;
-      midAngle: number;
+      startAngle: number;
       innerRadius: number;
       outerRadius: number;
       percent: number;
       index: number;
     } & Slice,
   ) => {
-    const { cx, cy, outerRadius, midAngle, name } = props;
+    const { cx, cy, outerRadius, startAngle, name } = props;
 
     const SHOW_LABEL_VALUE = ['00:00', '06:00', '12:00', '18:00'];
+    const SIDE_LABEL_VALUES = ['06:00', '18:00'];
+
+    const isSideValue = SIDE_LABEL_VALUES.includes(name);
+    const isBottomValue = name === '12:00';
 
     if (!SHOW_LABEL_VALUE.includes(name)) return null;
 
-    console.log('Props:', props);
-
     const radius = outerRadius;
-    const x = cx + radius * Math.cos(-midAngle * RADIAN);
-    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+    const x = cx + radius * Math.cos(-startAngle * RADIAN);
+    const y = cy + radius * Math.sin(-startAngle * RADIAN);
     return (
       <text
         x={x}
         y={y}
         fill="black"
-        textAnchor={x > cx ? 'start' : 'end'}
-        dominantBaseline="central"
+        // textAnchor={x > cx ? 'start' : 'end'}
+        textAnchor={isSideValue ? (x > cx ? 'start' : 'end') : 'middle'}
+        dominantBaseline={
+          isSideValue ? 'central' : isBottomValue ? 'hanging' : 'text-bottom'
+        }
       >
         {name}
       </text>
@@ -71,22 +74,14 @@ export const Clock = ({ data }: ClockProps) => {
         cy: number;
         midAngle: number;
         innerRadius: number;
+        middleRadius: number;
         outerRadius: number;
         percent: number;
         index: number;
       } & Slice,
     ) => {
-      const {
-        cx,
-        cy,
-        midAngle,
-        innerRadius,
-        outerRadius,
-        percent,
-        index,
-        name,
-      } = props;
-      const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+      const { cx, cy, midAngle, middleRadius, name } = props;
+      const radius = middleRadius;
       const x = cx + radius * Math.cos(-midAngle * RADIAN);
       const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
@@ -95,8 +90,10 @@ export const Clock = ({ data }: ClockProps) => {
           x={x}
           y={y}
           fill="white"
-          textAnchor={x > cx ? 'start' : 'end'}
-          dominantBaseline="central"
+          // textAnchor={x > cx ? 'start' : 'end'}
+          textAnchor="middle"
+          fontWeight="bold"
+          dominantBaseline="middle"
         >
           {name}
         </text>
@@ -144,38 +141,28 @@ export const Clock = ({ data }: ClockProps) => {
   }, [data]);
 
   return (
-    <PieChart width={800} height={800} style={{ border: '2px solid blue' }}>
+    <PieChart
+      width={800}
+      height={800}
+      className="active:outline-0"
+      style={{ border: '2px solid blue', outline: 'none' }}
+    >
       <Pie
         {...PIE_CONFIG}
         dataKey="value"
         data={dataWithBlanks}
         outerRadius="80%"
+        innerRadius="15%"
         fill="#8884d8"
-        // label={renderCustomizedLabel}
+        label={renderCustomizedLabel}
         labelLine={false}
-        onMouseEnter={(_, index) => {
-          setActive(index);
-        }}
-        onMouseLeave={() => {
-          setActive(9999);
-        }}
       >
-        {dataWithBlanks.map((entry, index) => {
-          const isBlank = entry.name === 'Unscheduled';
-          const isHover = active === index;
-
-          return (
-            <Cell
-              key={`cell-${index}`}
-              fill={isBlank && isHover ? 'gray' : entry.color}
-              onClick={() => {
-                console.log('Clicked:', entry);
-              }}
-              stroke={isHover ? 'cyan' : undefined}
-              strokeWidth={isHover ? 3 : 0}
-            />
-          );
-        })}
+        <Label value={name} position="center" />
+        {dataWithBlanks.map((entry, index) => (
+          <Cell key={`cell-${index}`} cursor="pointer" fill={entry.color} />
+        ))}
+        {/*<LabelList dataKey="name" />*/}
+        <Tooltip cursor={false} />
       </Pie>
       <Pie
         {...PIE_CONFIG}
@@ -186,7 +173,7 @@ export const Clock = ({ data }: ClockProps) => {
             value: 1,
           }))}
         dataKey="value"
-        innerRadius="75%"
+        innerRadius="77%"
         fill="#82ca9d"
         labelLine={false}
         label={renderClockLabel}

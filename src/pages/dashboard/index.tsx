@@ -2,12 +2,13 @@ import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import React from 'react';
 import { Clock } from '@/components/Clock';
+import { DashboardLayout } from '@/components/Layout';
 import { api } from '@/utils/api';
 
 export default function Dashboard() {
   const { data } = useSession();
   return (
-    <>
+    <DashboardLayout>
       <h1>Dashboard</h1>
       <Link href="/dashboard/schedule/create">Create Pie</Link>
 
@@ -15,7 +16,7 @@ export default function Dashboard() {
 
       <h2>Schedules</h2>
       <Schedules />
-    </>
+    </DashboardLayout>
   );
 }
 
@@ -29,6 +30,7 @@ const Schedules = () => {
       <p>{pie.name}</p>
 
       <Clock
+        name={pie.name}
         data={[
           { name: 'A', start: '08:00', end: '12:30', color: '#ff0000' },
           // { name: 'B', value: 4, color: '#00ff00' },
