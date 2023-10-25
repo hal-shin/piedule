@@ -30,6 +30,8 @@ export default function Create() {
   });
   const createSlice = api.slice.create.useMutation();
 
+  console.log('errors:', errors);
+
   const onSubmit = (data: CreateSliceSchema) => {
     console.log('Data:', data);
     createSlice.mutate(

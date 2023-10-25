@@ -8,17 +8,15 @@ import {
   TabPanels,
   Tabs,
 } from '@chakra-ui/react';
-import { useRouter } from 'next/router';
 import React from 'react';
 import { Clock } from '@/components/Clock';
 import { api } from '@/utils/api';
 
 export default function Dashboard() {
-  const router = useRouter();
   const pies = api.pie.getAll.useQuery();
 
   return (
-    <Container border="1px solid red" maxW="container.lg">
+    <Container maxW="container.lg">
       <Tabs variant="soft-rounded" colorScheme="green">
         <TabList>
           {pies.data?.map((pie) => (

@@ -1,6 +1,14 @@
+import { Box, Flex } from '@chakra-ui/react';
 import { type Slice } from '@prisma/client';
 import React, { useCallback, useMemo } from 'react';
-import { Cell, Label, Pie, PieChart, Tooltip } from 'recharts';
+import {
+  Cell,
+  Label,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+} from 'recharts';
 import { convertNumToTime, convertTimeToNum } from '@/utils/time';
 
 const UNSCHEDULED_COLOR = 'lightgray';
@@ -102,7 +110,16 @@ export const Clock = ({ data, name }: ClockProps) => {
   );
 
   const dataWithBlanks = useMemo(() => {
-    const slices = [...data];
+    const slices = [...data].sort((a, b) => {
+      const aNum = convertTimeToNum(a.start);
+      const bNum = convertTimeToNum(b.start);
+
+      if (aNum < bNum) return -1;
+      if (aNum > bNum) return 1;
+
+      return 0;
+    });
+    console.log('slices:', slices);
     const output = [];
     const MAX = 24;
     let count = 0;
@@ -139,45 +156,45 @@ export const Clock = ({ data, name }: ClockProps) => {
     return output;
   }, [data]);
 
+  console.log('dataWithBlanks:', dataWithBlanks);
+
   return (
-    <PieChart
-      width={800}
-      height={800}
-      className="active:outline-0"
-      style={{ border: '2px solid blue', outline: 'none' }}
-    >
-      <Pie
-        {...PIE_CONFIG}
-        dataKey="value"
-        data={dataWithBlanks}
-        outerRadius="80%"
-        innerRadius="15%"
-        fill="#8884d8"
-        label={renderCustomizedLabel}
-        labelLine={false}
-      >
-        <Label value={name} position="center" />
-        {dataWithBlanks.map((entry, index) => (
-          <Cell key={`cell-${index}`} cursor="pointer" fill={entry.color} />
-        ))}
-        {/*<LabelList dataKey="name" />*/}
-        <Tooltip cursor={false} />
-      </Pie>
-      <Pie
-        {...PIE_CONFIG}
-        data={Array(24)
-          .fill(1)
-          .map((_, index) => ({
-            name: convertNumToTime(index),
-            value: 1,
-          }))}
-        dataKey="value"
-        innerRadius="77%"
-        fill="#82ca9d"
-        labelLine={false}
-        label={renderClockLabel}
-      />
-      {/*{needle(value, data, cx, cy, iR, oR, '#d0d000')}*/}
-    </PieChart>
+    <Flex width={{ base: '100%', md: '80%' }} marginX="auto">
+      <ResponsiveContainer aspect={1} width="100%">
+        <PieChart>
+          <Pie
+            {...PIE_CONFIG}
+            dataKey="value"
+            data={dataWithBlanks}
+            outerRadius="87%"
+            innerRadius="15%"
+            fill="#8884d8"
+            label={renderCustomizedLabel}
+            labelLine={false}
+          >
+            <Label value={name} position="center" />
+            {dataWithBlanks.map((entry, index) => (
+              <Cell key={`cell-${index}`} cursor="pointer" fill={entry.color} />
+            ))}
+            <Tooltip cursor={false} />
+          </Pie>
+          <Pie
+            {...PIE_CONFIG}
+            data={Array(24)
+              .fill(1)
+              .map((_, index) => ({
+                name: convertNumToTime(index),
+                value: 1,
+              }))}
+            dataKey="value"
+            innerRadius="87%"
+            outerRadius="90%"
+            fill="#82ca9d"
+            labelLine={false}
+            label={renderClockLabel}
+          />
+        </PieChart>
+      </ResponsiveContainer>
+    </Flex>
   );
 };

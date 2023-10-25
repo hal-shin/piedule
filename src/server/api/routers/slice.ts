@@ -27,6 +27,7 @@ export const sliceRouter = createTRPCRouter({
           name: input.name,
           start: input.start,
           end: input.end,
+          color: input.color,
           pie: {
             connect: {
               id: pie.id,
