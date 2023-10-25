@@ -55,19 +55,21 @@ export default function Create() {
         onClick={() => router.back()}
         variant="ghost"
         size="sm"
+        my={4}
       >
         Go Back
       </Button>
-      <Heading size="lg">Create New Time Slice</Heading>
+      <Heading size="lg" mb={4}>
+        Create New Time Slice
+      </Heading>
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <VStack alignItems="flex-start">
           <FormControl isInvalid={Boolean(errors.name)}>
-            <FormLabel htmlFor="name">First name</FormLabel>
+            <FormLabel htmlFor="name">Title</FormLabel>
             <Input
               id="name"
-              placeholder="name"
-              defaultValue="Sample event"
+              placeholder="E.g. Studying"
               {...register('name', {
                 required: 'This is required',
                 minLength: { value: 4, message: 'Minimum length should be 4' },
