@@ -1,4 +1,4 @@
-import { Box, Flex } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 import { type Slice } from '@prisma/client';
 import React, { useCallback, useMemo } from 'react';
 import {
