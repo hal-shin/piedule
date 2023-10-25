@@ -50,13 +50,14 @@ export const Clock = ({ data, name }: ClockProps) => {
 
     const SHOW_LABEL_VALUE = ['00:00', '06:00', '12:00', '18:00'];
     const SIDE_LABEL_VALUES = ['06:00', '18:00'];
+    const PADDING = 8;
 
     const isSideValue = SIDE_LABEL_VALUES.includes(name);
     const isBottomValue = name === '12:00';
 
     if (!SHOW_LABEL_VALUE.includes(name)) return null;
 
-    const radius = outerRadius;
+    const radius = outerRadius + PADDING;
     const x = cx + radius * Math.cos(-startAngle * RADIAN);
     const y = cy + radius * Math.sin(-startAngle * RADIAN);
     return (
