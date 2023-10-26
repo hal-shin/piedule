@@ -9,6 +9,7 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from 'recharts';
+import { useMediaQuery } from '@/hooks';
 import {
   convertNumToTime,
   convertTimeToNum,
@@ -31,6 +32,8 @@ interface ClockProps {
 }
 
 export const Clock = ({ data, name }: ClockProps) => {
+  const isLargerThan580 = useMediaQuery('(min-width: 580px)');
+  const isLargerThan640 = useMediaQuery('(min-width: 640px)');
   const createBlank = (duration: number) => {
     return {
       value: duration,
@@ -54,7 +57,7 @@ export const Clock = ({ data, name }: ClockProps) => {
 
     const SHOW_LABEL_VALUE = ['00:00', '06:00', '12:00', '18:00'];
     const SIDE_LABEL_VALUES = ['06:00', '18:00'];
-    const PADDING = 8;
+    const PADDING = isLargerThan640 ? 8 : 2;
 
     const isSideValue = SIDE_LABEL_VALUES.includes(name);
     const isBottomValue = name === '12:00';
@@ -74,7 +77,7 @@ export const Clock = ({ data, name }: ClockProps) => {
           isSideValue ? 'central' : isBottomValue ? 'hanging' : 'text-bottom'
         }
       >
-        {name}
+        {isLargerThan580 ? name : name.slice(0, 2)}
       </text>
     );
   };
@@ -96,6 +99,7 @@ export const Clock = ({ data, name }: ClockProps) => {
       const radius = middleRadius;
       const x = cx + radius * Math.cos(-midAngle * RADIAN);
       const y = cy + radius * Math.sin(-midAngle * RADIAN);
+      console.log('isLargerThan640:', isLargerThan640);
 
       return (
         <text
@@ -105,6 +109,7 @@ export const Clock = ({ data, name }: ClockProps) => {
           // textAnchor={x > cx ? 'start' : 'end'}
           textAnchor="middle"
           fontWeight="bold"
+          fontSize={isLargerThan640 ? '16px' : '12px'}
           dominantBaseline="middle"
         >
           {name}
@@ -153,7 +158,7 @@ export const Clock = ({ data, name }: ClockProps) => {
   }, [data]);
 
   return (
-    <Flex width={{ base: '100%', md: '80%' }} marginX="auto">
+    <Flex width={{ base: '95%', lg: '80%', xl: 1020 }} marginX="auto">
       <ResponsiveContainer aspect={1} width="100%">
         <PieChart>
           <Pie

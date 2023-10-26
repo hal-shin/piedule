@@ -13,7 +13,7 @@ export const Footer = ({}: FooterProps) => {
       minHeight={NAVBAR_HEIGHT + 'px'}
       display="flex"
       borderTopRadius={8}
-      mt={8}
+      mt={16}
       px={4}
       py={6}
     >

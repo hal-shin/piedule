@@ -25,8 +25,10 @@ export const Navbar = ({}: NavbarProps) => {
         height={NAVBAR_HEIGHT + 'px'}
         justifyContent="space-between"
         alignItems="center"
-        bgColor="orange.100"
-        borderBottomRadius={8}
+        maxW="container.sm"
+        bgColor="gray.100"
+        borderBottomRadius={{ base: 0, md: 8 }}
+        boxShadow="sm"
       >
         <Heading
           bgGradient="linear(to-l, #7928CA, #FF0080)"

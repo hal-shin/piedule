@@ -1,3 +1,4 @@
+import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { Link } from '@chakra-ui/next-js';
 import {
   Box,
@@ -5,6 +6,7 @@ import {
   Flex,
   Heading,
   HStack,
+  IconButton,
   Text,
   VStack,
 } from '@chakra-ui/react';
@@ -12,6 +14,7 @@ import { Pie, Slice } from '@prisma/client';
 import React from 'react';
 import { Clock } from '@/components/Clock/Clock';
 import { Container } from '@/components/Container';
+import { api } from '@/utils/api';
 import { sortByStartTime } from '@/utils/time';
 
 interface ClockViewProps {
@@ -19,6 +22,9 @@ interface ClockViewProps {
 }
 
 export const ClockView = ({ pie }: ClockViewProps) => {
+  const updateSlice = api.slice.update.useMutation();
+  const deleteSlice = api.slice.delete.useMutation();
+
   return (
     <div>
       <Clock name={pie.name} data={pie.slices} />
@@ -52,6 +58,7 @@ export const ClockView = ({ pie }: ClockViewProps) => {
             {pie.slices.sort(sortByStartTime).map((slice) => {
               return (
                 <Flex
+                  key={slice.id}
                   bgColor="gray.100"
                   px={4}
                   py={2}
@@ -68,9 +75,36 @@ export const ClockView = ({ pie }: ClockViewProps) => {
                     />
                     <Text>{slice.name}</Text>
                   </Flex>
-                  <Text>
-                    {slice.start} to {slice.end}
-                  </Text>
+                  <Flex align="center">
+                    <Text mr={4}>
+                      {slice.start} to {slice.end}
+                    </Text>
+                    <HStack>
+                      <IconButton
+                        aria-label="Edit event"
+                        icon={<EditIcon />}
+                        variant="ghost"
+                        size="sm"
+                        fontSize="18px"
+                        _hover={{
+                          color: 'green',
+                        }}
+                      />
+                      <IconButton
+                        aria-label="Delete event"
+                        onClick={() =>
+                          deleteSlice.mutate({ sliceId: slice.id })
+                        }
+                        icon={<DeleteIcon />}
+                        variant="ghost"
+                        size="sm"
+                        fontSize="18px"
+                        _hover={{
+                          color: 'red',
+                        }}
+                      />
+                    </HStack>
+                  </Flex>
                 </Flex>
               );
             })}

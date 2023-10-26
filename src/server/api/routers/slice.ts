@@ -1,6 +1,11 @@
 import { TRPCError } from '@trpc/server';
 import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc';
-import { createSliceInput, getSlices } from '@/types/slice';
+import {
+  createSliceInput,
+  deleteSlice,
+  getSlices,
+  updateSlice,
+} from '@/types/slice';
 
 export const sliceRouter = createTRPCRouter({
   create: protectedProcedure
@@ -58,4 +63,70 @@ export const sliceRouter = createTRPCRouter({
       where: { pieId: input.pieId },
     });
   }),
+
+  update: protectedProcedure
+    .input(updateSlice)
+    .mutation(async ({ ctx, input }) => {
+      const slice = await ctx.db.slice.findFirstOrThrow({
+        where: {
+          id: input.sliceId,
+        },
+        include: {
+          pie: {
+            include: {
+              owner: true,
+            },
+          },
+        },
+      });
+
+      if (slice.pie.owner.id !== ctx.session.user.id) {
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: "You cannot edit slice for a pie you don't own.",
+        });
+      }
+
+      return ctx.db.slice.update({
+        where: {
+          id: input.sliceId,
+        },
+        data: {
+          name: input.name,
+          start: input.start,
+          end: input.end,
+          color: input.color,
+        },
+      });
+    }),
+
+  delete: protectedProcedure
+    .input(deleteSlice)
+    .mutation(async ({ ctx, input }) => {
+      const slice = await ctx.db.slice.findFirstOrThrow({
+        where: {
+          id: input.sliceId,
+        },
+        include: {
+          pie: {
+            include: {
+              owner: true,
+            },
+          },
+        },
+      });
+
+      if (slice.pie.owner.id !== ctx.session.user.id) {
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: "You cannot edit slice for a pie you don't own.",
+        });
+      }
+
+      return ctx.db.slice.delete({
+        where: {
+          id: input.sliceId,
+        },
+      });
+    }),
 });
