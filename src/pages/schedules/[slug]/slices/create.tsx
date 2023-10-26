@@ -55,7 +55,6 @@ export default function Create() {
   const createSlice = api.slice.create.useMutation();
 
   const onSubmit = (data: CreateSliceSchema) => {
-    console.log('HERE', pie.data, pie);
     if (!pie.data) return;
 
     const slices = pie.data.slices;
@@ -93,13 +92,15 @@ export default function Create() {
       return;
     }
 
-    console.log('Data:', data);
-
     createSlice.mutate(
       { ...data, pieSlug: router.query.slug as string },
       {
         onSuccess: () => {
-          void router.push('/schedules');
+          void router.push('/schedules', {
+            query: {
+              slug: router.query.slug as string,
+            },
+          });
         },
 
         onError: () => {

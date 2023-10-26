@@ -13,3 +13,13 @@ export const getPieByIdInput = z.object({
 export const getPieBySlugInput = z.object({
   slug: z.string(),
 });
+
+export const updatePieInput = z.object({
+  id: z.string().optional(),
+  name: z.string().min(2),
+  description: z.string().optional(),
+});
+
+export const deletePieInput = z.object({
+  id: z.string(),
+});

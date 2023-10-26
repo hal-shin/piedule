@@ -14,35 +14,47 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { type z } from 'zod';
-import { createPieInput } from '@/types/pie';
+import { updatePieInput } from '@/types/pie';
 import { api } from '@/utils/api';
 
-type CreatePieSchema = z.infer<typeof createPieInput>;
+type UpdatePieSchema = z.infer<typeof updatePieInput>;
 
-export default function Create() {
+export default function Edit() {
   const router = useRouter();
+  const { id, name, description } = router.query;
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<CreatePieSchema>({
-    resolver: zodResolver(createPieInput),
+  } = useForm<UpdatePieSchema>({
+    defaultValues: {
+      name: (name as string) || '',
+      description: (description as string) || '',
+    },
+    resolver: zodResolver(updatePieInput),
   });
-  const createPie = api.pie.create.useMutation();
+  const updatePie = api.pie.update.useMutation();
 
-  const onSubmit = (data: CreatePieSchema) => {
-    createPie.mutate(
+  const onSubmit = (data: UpdatePieSchema) => {
+    updatePie.mutate(
       {
+        id: id as string,
         name: data.name.trim(),
-        description: data.description,
+        description: data.description?.trim(),
       },
       {
-        onSuccess: () => {
-          void router.push('/schedules');
+        onSuccess: (successData) => {
+          console.log('successData:', successData);
+          void router.push({
+            pathname: '/schedules',
+            query: {
+              slug: successData.slug,
+            },
+          });
         },
 
         onError: () => {
-          alert('Unable to create pie!');
+          alert('Unable to update pie!');
         },
       },
     );
@@ -59,7 +71,7 @@ export default function Create() {
         Go Back
       </Button>
       <Heading size="lg" mb={4}>
-        Create New Schedule
+        Update Schedule
       </Heading>
 
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -95,7 +107,7 @@ export default function Create() {
             isLoading={isSubmitting}
             type="submit"
           >
-            Create
+            Update
           </Button>
         </VStack>
       </form>
