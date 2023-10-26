@@ -88,6 +88,7 @@ model Pie {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
+    @@unique([id, slug])
     @@index([ownerId])
 }
 
@@ -105,4 +106,6 @@ model Slice {
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    @@index([pieId])
 }

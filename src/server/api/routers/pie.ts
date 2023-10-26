@@ -1,6 +1,10 @@
 import { z } from 'zod';
 import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc';
-import { createPieInput } from '@/types/pie';
+import {
+  createPieInput,
+  getPieByIdInput,
+  getPieBySlugInput,
+} from '@/types/pie';
 import { convertStringToURLSlug } from '@/utils/format';
 
 export const pieRouter = createTRPCRouter({
@@ -19,6 +23,35 @@ export const pieRouter = createTRPCRouter({
               id: ctx.session.user.id,
             },
           },
+        },
+      });
+    }),
+
+  getById: protectedProcedure
+    .input(getPieByIdInput)
+    .query(async ({ ctx, input }) => {
+      return ctx.db.pie.findFirst({
+        where: {
+          id: input.id,
+          owner: {
+            id: ctx.session.user.id,
+          },
+        },
+      });
+    }),
+
+  getBySlug: protectedProcedure
+    .input(getPieBySlugInput)
+    .query(async ({ ctx, input }) => {
+      return ctx.db.pie.findFirst({
+        where: {
+          slug: input.slug,
+          owner: {
+            id: ctx.session.user.id,
+          },
+        },
+        include: {
+          slices: true,
         },
       });
     }),

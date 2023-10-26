@@ -2,12 +2,13 @@ import { ArrowBackIcon } from '@chakra-ui/icons';
 import {
   Box,
   Button,
+  CircularProgress,
   Container,
-  Flex,
   FormControl,
   FormErrorMessage,
   FormLabel,
   Heading,
+  HStack,
   Input,
   VStack,
 } from '@chakra-ui/react';
@@ -18,6 +19,7 @@ import { useForm } from 'react-hook-form';
 import { type z } from 'zod';
 import { createSliceInput } from '@/types/slice';
 import { api } from '@/utils/api';
+import { convertTimeToNum, validateSliceTime } from '@/utils/time';
 
 const COLOR_SUGGESTIONS = [
   '#003f5c',
@@ -32,35 +34,91 @@ const COLOR_SUGGESTIONS = [
 
 type CreateSliceSchema = z.infer<typeof createSliceInput>;
 
-export default function Create() {
+export default function Edit() {
+  // const utils = api.useUtils();
   const router = useRouter();
+  const { sliceId, name, start, end, color } = router.query;
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     setValue,
+    setError,
   } = useForm<CreateSliceSchema>({
+    defaultValues: {
+      name: (name as string) || '',
+      start: (start as string) || '',
+      end: (end as string) || '',
+      color: (color as string) || '',
+    },
     resolver: zodResolver(createSliceInput),
   });
-  const createSlice = api.slice.create.useMutation();
+  const pie = api.pie.getBySlug.useQuery(
+    { slug: router.query.slug as string },
+    {
+      enabled: Boolean(router.query.slug),
+    },
+  );
 
-  console.log('errors:', errors);
+  const updateSlice = api.slice.update.useMutation({
+    // onSuccess: () => {
+    //   void utils.slice.getAll.invalidate();
+    // },
+  });
 
   const onSubmit = (data: CreateSliceSchema) => {
-    console.log('Data:', data);
-    createSlice.mutate(
-      { ...data, pieId: router.query.id as string },
+    if (!pie.data) return;
+
+    const slices = pie.data.slices.filter((slice) => slice.id !== sliceId);
+
+    if (convertTimeToNum(data.start) > convertTimeToNum(data.end)) {
+      setError('end', { message: 'End time cannot be before start time.' });
+
+      return;
+    }
+
+    if (data.start === data.end) {
+      setError('start', {
+        message: 'Start time and end time cannot be the same.',
+      });
+      setError('end', {
+        message: 'Start time and end time cannot be the same.',
+      });
+
+      return;
+    }
+
+    const foundConflict = validateSliceTime(
+      { start: data.start, end: data.end },
+      slices,
+    );
+
+    if (foundConflict) {
+      setError('start', {
+        message: `Overlaps with event: "${foundConflict.name}" - ${foundConflict.start} to ${foundConflict.end}`,
+      });
+      setError('end', {
+        message: `Overlaps with event: "${foundConflict.name}" - ${foundConflict.start} to ${foundConflict.end}`,
+      });
+
+      return;
+    }
+
+    updateSlice.mutate(
+      { ...data, sliceId: sliceId as string },
       {
         onSuccess: () => {
           void router.push('/schedules');
         },
 
         onError: () => {
-          alert('Unable to create time slice!');
+          alert('Unable to edit time slice!');
         },
       },
     );
   };
+
+  if (pie.isLoading) return <CircularProgress />;
 
   return (
     <Container>
@@ -73,7 +131,7 @@ export default function Create() {
         Go Back
       </Button>
       <Heading size="lg" mb={4}>
-        Create New Time Slice
+        Edit Time Slice
       </Heading>
 
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -123,10 +181,16 @@ export default function Create() {
 
           <FormControl>
             <FormLabel htmlFor="color">Color</FormLabel>
-            <Input id="color" {...register('color')} type="color" />
-            <Flex flexWrap="wrap">
+            <Input
+              id="color"
+              defaultValue="#003f5c"
+              {...register('color')}
+              type="color"
+            />
+            <HStack flexWrap="wrap" mt={2}>
               {COLOR_SUGGESTIONS.map((color) => (
                 <Box
+                  key={`color-${color}`}
                   cursor="pointer"
                   width="54px"
                   height="54px"
@@ -134,7 +198,7 @@ export default function Create() {
                   onClick={() => setValue('color', color)}
                 />
               ))}
-            </Flex>
+            </HStack>
           </FormControl>
 
           <Button

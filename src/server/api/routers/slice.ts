@@ -13,7 +13,7 @@ export const sliceRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const pie = await ctx.db.pie.findFirstOrThrow({
         where: {
-          id: input.pieId,
+          slug: input.pieSlug,
         },
         include: {
           owner: true,

@@ -5,3 +5,11 @@ export const createPieInput = z.object({
   description: z.string().optional(),
   slug: z.string().min(2).optional(),
 });
+
+export const getPieByIdInput = z.object({
+  id: z.string(),
+});
+
+export const getPieBySlugInput = z.object({
+  slug: z.string(),
+});

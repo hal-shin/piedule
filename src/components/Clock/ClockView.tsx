@@ -1,4 +1,4 @@
-import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
+import { EditIcon } from '@chakra-ui/icons';
 import { Link } from '@chakra-ui/next-js';
 import {
   Box,
@@ -13,7 +13,10 @@ import {
 import { Pie, Slice } from '@prisma/client';
 import React from 'react';
 import { Clock } from '@/components/Clock/Clock';
+import { DeleteSliceButton } from '@/components/Clock/DeleteSliceButton';
+import { EditSliceButton } from '@/components/Clock/EditSliceButton';
 import { Container } from '@/components/Container';
+import { Loading } from '@/components/Loading';
 import { api } from '@/utils/api';
 import { sortByStartTime } from '@/utils/time';
 
@@ -22,12 +25,15 @@ interface ClockViewProps {
 }
 
 export const ClockView = ({ pie }: ClockViewProps) => {
-  const updateSlice = api.slice.update.useMutation();
-  const deleteSlice = api.slice.delete.useMutation();
+  const utils = api.useUtils();
+  const slices = api.slice.getAll.useQuery({ pieId: pie.id });
+
+  if (slices.isLoading) return <Loading />;
+  if (!slices.data) return 'Something went wrong!';
 
   return (
     <div>
-      <Clock name={pie.name} data={pie.slices} />
+      <Clock name={pie.name} data={slices.data} />
       <Container>
         <Box mb={4}>
           <Heading size="md" pb={4}>
@@ -36,7 +42,7 @@ export const ClockView = ({ pie }: ClockViewProps) => {
           <HStack>
             <Button
               as={Link}
-              href={`/schedules/${pie.id}/slice/create`}
+              href={`/schedules/${pie.slug}/slices/create`}
               style={{ textDecoration: 'none' }}
             >
               Add Event
@@ -54,8 +60,8 @@ export const ClockView = ({ pie }: ClockViewProps) => {
             Events
           </Heading>
           <VStack alignItems="flex-start">
-            {pie.slices.length === 0 && <Text>No events yet.</Text>}
-            {pie.slices.sort(sortByStartTime).map((slice) => {
+            {slices.data.length === 0 && <Text>No events yet.</Text>}
+            {slices.data?.sort(sortByStartTime).map((slice) => {
               return (
                 <Flex
                   key={slice.id}
@@ -80,29 +86,8 @@ export const ClockView = ({ pie }: ClockViewProps) => {
                       {slice.start} to {slice.end}
                     </Text>
                     <HStack>
-                      <IconButton
-                        aria-label="Edit event"
-                        icon={<EditIcon />}
-                        variant="ghost"
-                        size="sm"
-                        fontSize="18px"
-                        _hover={{
-                          color: 'green',
-                        }}
-                      />
-                      <IconButton
-                        aria-label="Delete event"
-                        onClick={() =>
-                          deleteSlice.mutate({ sliceId: slice.id })
-                        }
-                        icon={<DeleteIcon />}
-                        variant="ghost"
-                        size="sm"
-                        fontSize="18px"
-                        _hover={{
-                          color: 'red',
-                        }}
-                      />
+                      <EditSliceButton slice={slice} pie={pie} />
+                      <DeleteSliceButton slice={slice} />
                     </HStack>
                   </Flex>
                 </Flex>

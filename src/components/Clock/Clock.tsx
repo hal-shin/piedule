@@ -99,7 +99,6 @@ export const Clock = ({ data, name }: ClockProps) => {
       const radius = middleRadius;
       const x = cx + radius * Math.cos(-midAngle * RADIAN);
       const y = cy + radius * Math.sin(-midAngle * RADIAN);
-      console.log('isLargerThan640:', isLargerThan640);
 
       return (
         <text

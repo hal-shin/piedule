@@ -26,3 +26,19 @@ export const sortByStartTime = (a: Slice, b: Slice) => {
 
   return 0;
 };
+
+export const validateSliceTime = (
+  currentSlice: { start: string; end: string },
+  slices: Array<Slice>,
+) => {
+  return slices.find((slice) => {
+    if (
+      convertTimeToNum(currentSlice.start) < convertTimeToNum(slice.end) &&
+      convertTimeToNum(currentSlice.end) > convertTimeToNum(slice.start)
+    ) {
+      return true;
+    }
+
+    return false;
+  });
+};
