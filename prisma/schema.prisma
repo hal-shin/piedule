@@ -77,11 +77,13 @@ model VerificationToken {
 }
 
 model Pie {
-    id      String  @id @default(cuid())
-    name    String
-    owner   User    @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-    ownerId String
-    slices  Slice[]
+    id          String  @id @default(cuid())
+    name        String
+    description String?
+    slug        String
+    owner       User    @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+    ownerId     String
+    slices      Slice[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt

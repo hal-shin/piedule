@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc';
 import { createPieInput } from '@/types/pie';
+import { convertStringToURLSlug } from '@/utils/format';
 
 export const pieRouter = createTRPCRouter({
   create: protectedProcedure
@@ -10,8 +11,9 @@ export const pieRouter = createTRPCRouter({
 
       return ctx.db.pie.create({
         data: {
-          name: input.name,
-
+          name: input.name.trim(),
+          description: input.description,
+          slug: convertStringToURLSlug(input.name.trim()),
           owner: {
             connect: {
               id: ctx.session.user.id,

@@ -28,17 +28,24 @@ export const Navbar = ({}: NavbarProps) => {
         bgColor="orange.100"
         borderBottomRadius={8}
       >
-        <Heading>{APP_NAME}</Heading>
+        <Heading
+          bgGradient="linear(to-l, #7928CA, #FF0080)"
+          bgClip="text"
+          fontWeight="extrabold"
+          size="lg"
+        >
+          {APP_NAME}
+        </Heading>
         <Flex>
           {!isAuthenticated ? (
             <Button
-              onClick={() => signIn(undefined, { callbackUrl: '/dashboard' })}
+              onClick={() => signIn(undefined, { callbackUrl: '/schedules' })}
             >
               Login
             </Button>
           ) : (
             <Button
-              onClick={() => signIn(undefined, { callbackUrl: '/dashboard' })}
+              onClick={() => signIn(undefined, { callbackUrl: '/schedules' })}
             >
               Logout
             </Button>

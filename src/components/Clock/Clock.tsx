@@ -9,7 +9,11 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from 'recharts';
-import { convertNumToTime, convertTimeToNum } from '@/utils/time';
+import {
+  convertNumToTime,
+  convertTimeToNum,
+  sortByStartTime,
+} from '@/utils/time';
 
 const UNSCHEDULED_COLOR = 'lightgray';
 const RADIAN = Math.PI / 180;
@@ -111,16 +115,7 @@ export const Clock = ({ data, name }: ClockProps) => {
   );
 
   const dataWithBlanks = useMemo(() => {
-    const slices = [...data].sort((a, b) => {
-      const aNum = convertTimeToNum(a.start);
-      const bNum = convertTimeToNum(b.start);
-
-      if (aNum < bNum) return -1;
-      if (aNum > bNum) return 1;
-
-      return 0;
-    });
-    console.log('slices:', slices);
+    const slices = [...data].sort(sortByStartTime);
     const output = [];
     const MAX = 24;
     let count = 0;
@@ -157,8 +152,6 @@ export const Clock = ({ data, name }: ClockProps) => {
     return output;
   }, [data]);
 
-  console.log('dataWithBlanks:', dataWithBlanks);
-
   return (
     <Flex width={{ base: '100%', md: '80%' }} marginX="auto">
       <ResponsiveContainer aspect={1} width="100%">
@@ -167,7 +160,7 @@ export const Clock = ({ data, name }: ClockProps) => {
             {...PIE_CONFIG}
             dataKey="value"
             data={dataWithBlanks}
-            outerRadius="87%"
+            outerRadius="84%"
             innerRadius="15%"
             fill="#8884d8"
             label={renderCustomizedLabel}
@@ -188,8 +181,8 @@ export const Clock = ({ data, name }: ClockProps) => {
                 value: 1,
               }))}
             dataKey="value"
-            innerRadius="87%"
-            outerRadius="90%"
+            innerRadius="84%"
+            outerRadius="87%"
             fill="#82ca9d"
             labelLine={false}
             label={renderClockLabel}

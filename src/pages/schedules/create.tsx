@@ -16,6 +16,7 @@ import { useForm } from 'react-hook-form';
 import { type z } from 'zod';
 import { createPieInput } from '@/types/pie';
 import { api } from '@/utils/api';
+import { convertStringToURLSlug } from '@/utils/format';
 
 type CreatePieSchema = z.infer<typeof createPieInput>;
 
@@ -31,15 +32,21 @@ export default function Create() {
   const createPie = api.pie.create.useMutation();
 
   const onSubmit = (data: CreatePieSchema) => {
-    createPie.mutate(data, {
-      onSuccess: () => {
-        void router.push('/dashboard');
+    createPie.mutate(
+      {
+        name: data.name.trim(),
+        description: data.description,
       },
+      {
+        onSuccess: () => {
+          void router.push('/schedules');
+        },
 
-      onError: () => {
-        alert('Unable to create pie!');
+        onError: () => {
+          alert('Unable to create pie!');
+        },
       },
-    });
+    );
   };
 
   return (
@@ -48,7 +55,6 @@ export default function Create() {
         leftIcon={<ArrowBackIcon />}
         onClick={() => router.back()}
         variant="ghost"
-        size="sm"
         my={4}
       >
         Go Back

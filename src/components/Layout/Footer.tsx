@@ -1,7 +1,8 @@
-import { Box, Flex, Heading, Text } from '@chakra-ui/react';
+import { Box, Flex, Heading, IconButton, Text } from '@chakra-ui/react';
 import React from 'react';
+import { FaGithub } from 'react-icons/fa6';
 import { Container } from '@/components/Container';
-import { APP_NAME, NAVBAR_HEIGHT } from '@/constants';
+import { APP_NAME, GITHUB_LINK, NAVBAR_HEIGHT } from '@/constants';
 
 interface FooterProps {}
 
@@ -16,9 +17,19 @@ export const Footer = ({}: FooterProps) => {
       px={4}
       py={6}
     >
-      <Flex flex={1} alignItems="flex-start">
+      <Box flex={1} alignItems="flex-start">
         <Heading size="md">{APP_NAME}</Heading>
-      </Flex>
+        <IconButton
+          as={'a'}
+          aria-label="GitHub"
+          icon={<FaGithub />}
+          href={GITHUB_LINK}
+          variant="ghost"
+          fontSize="22px"
+          colorScheme="alphaWhite"
+          mx={0}
+        />
+      </Box>
       <Box flex={2}>
         <Text>
           {APP_NAME} is a planner app that helps you visualize your entire day

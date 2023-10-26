@@ -1,7 +1,9 @@
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import {
+  Box,
   Button,
   Container,
+  Flex,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -17,6 +19,17 @@ import { type z } from 'zod';
 import { createSliceInput } from '@/types/slice';
 import { api } from '@/utils/api';
 
+const COLOR_SUGGESTIONS = [
+  '#003f5c',
+  '#2f4b7c',
+  '#665191',
+  '#a05195',
+  '#d45087',
+  '#f95d6a',
+  '#ff7c43',
+  '#ffa600',
+];
+
 type CreateSliceSchema = z.infer<typeof createSliceInput>;
 
 export default function Create() {
@@ -25,6 +38,7 @@ export default function Create() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    setValue,
   } = useForm<CreateSliceSchema>({
     resolver: zodResolver(createSliceInput),
   });
@@ -38,7 +52,7 @@ export default function Create() {
       { ...data, pieId: router.query.id as string },
       {
         onSuccess: () => {
-          void router.push('/dashboard');
+          void router.push('/schedules');
         },
 
         onError: () => {
@@ -54,7 +68,6 @@ export default function Create() {
         leftIcon={<ArrowBackIcon />}
         onClick={() => router.back()}
         variant="ghost"
-        size="sm"
         my={4}
       >
         Go Back
@@ -111,6 +124,17 @@ export default function Create() {
           <FormControl>
             <FormLabel htmlFor="color">Color</FormLabel>
             <Input id="color" {...register('color')} type="color" />
+            <Flex flexWrap="wrap">
+              {COLOR_SUGGESTIONS.map((color) => (
+                <Box
+                  cursor="pointer"
+                  width="54px"
+                  height="54px"
+                  bgColor={color}
+                  onClick={() => setValue('color', color)}
+                />
+              ))}
+            </Flex>
           </FormControl>
 
           <Button
