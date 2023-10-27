@@ -96,7 +96,8 @@ export default function Create() {
       { ...data, pieSlug: router.query.slug as string },
       {
         onSuccess: () => {
-          void router.push('/schedules', {
+          void router.push({
+            pathname: '/schedules',
             query: {
               slug: router.query.slug as string,
             },

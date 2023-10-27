@@ -81,9 +81,13 @@ model Pie {
     name        String
     description String?
     slug        String
-    owner       User    @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-    ownerId     String
-    slices      Slice[]
+
+    owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+    ownerId String
+
+    slices Slice[]
+
+    showUnscheduled Boolean @default(true)
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt

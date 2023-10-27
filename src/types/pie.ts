@@ -20,6 +20,11 @@ export const updatePieInput = z.object({
   description: z.string().optional(),
 });
 
+export const updatePieSettingsInput = z.object({
+  id: z.string().optional(),
+  showUnscheduled: z.boolean(),
+});
+
 export const deletePieInput = z.object({
   id: z.string(),
 });

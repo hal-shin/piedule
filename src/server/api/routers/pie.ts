@@ -6,6 +6,7 @@ import {
   getPieByIdInput,
   getPieBySlugInput,
   updatePieInput,
+  updatePieSettingsInput,
 } from '@/types/pie';
 import { convertStringToURLSlug } from '@/utils/format';
 
@@ -105,6 +106,37 @@ export const pieRouter = createTRPCRouter({
           name: input.name.trim(),
           description: input.description,
           slug: convertStringToURLSlug(input.name.trim()),
+        },
+      });
+    }),
+
+  updateSettings: protectedProcedure
+    .input(updatePieInput)
+    .mutation(async ({ ctx, input }) => {
+      const { id, ...updateData } = input;
+
+      const pie = await ctx.db.pie.findFirstOrThrow({
+        where: {
+          id,
+        },
+        include: {
+          owner: true,
+        },
+      });
+
+      if (pie.owner.id !== ctx.session.user.id) {
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: "You cannot edit a pie you don't own.",
+        });
+      }
+
+      return ctx.db.pie.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          ...updateData,
         },
       });
     }),

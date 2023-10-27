@@ -108,7 +108,8 @@ export default function Edit() {
       { ...data, sliceId: sliceId as string },
       {
         onSuccess: () => {
-          void router.push('/schedules', {
+          void router.push({
+            pathname: '/schedules',
             query: {
               slug: router.query.slug as string,
             },

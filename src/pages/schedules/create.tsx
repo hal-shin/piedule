@@ -37,8 +37,13 @@ export default function Create() {
         description: data.description,
       },
       {
-        onSuccess: () => {
-          void router.push('/schedules');
+        onSuccess: (successData) => {
+          void router.push({
+            pathname: '/schedules',
+            query: {
+              slug: successData.slug,
+            },
+          });
         },
 
         onError: () => {
