@@ -1,3 +1,4 @@
+import { Text } from '@chakra-ui/react';
 import { Pie, Slice } from '@prisma/client';
 import React from 'react';
 import { Container } from '@/components/Container';
@@ -19,6 +20,9 @@ export const ClockView = ({ pie }: ClockViewProps) => {
 
   return (
     <>
+      <Container>
+        <Text color="gray.500">{pie.description}</Text>
+      </Container>
       <Clock name={pie.name} data={slices.data} />
       <Container>
         {slices.data && <ClockEventsSection pie={pie} slices={slices.data} />}

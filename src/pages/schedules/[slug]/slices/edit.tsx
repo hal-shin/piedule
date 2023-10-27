@@ -212,7 +212,7 @@ export default function Edit() {
             isLoading={isSubmitting}
             type="submit"
           >
-            Create
+            Update
           </Button>
         </VStack>
       </form>
