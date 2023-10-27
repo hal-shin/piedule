@@ -1,6 +1,15 @@
-import { Box, Flex, HStack, Text, VStack } from '@chakra-ui/react';
+import {
+  Box,
+  Flex,
+  HStack,
+  Text,
+  useColorModeValue,
+  VStack,
+} from '@chakra-ui/react';
 import { Pie, Slice } from '@prisma/client';
+import dayjs from 'dayjs';
 import React from 'react';
+import { useIsDarkMode } from '@/hooks/useIsDarkMode';
 import { sortByStartTime } from '@/utils/time';
 import { Section } from './ClockSection';
 import { DeleteSliceButton } from './DeleteSliceButton';
@@ -12,15 +21,27 @@ interface ClockEventsProps {
 }
 
 export const ClockEventsSection = ({ pie, slices }: ClockEventsProps) => {
+  const isDark = useIsDarkMode();
+  const bgColor = useColorModeValue('gray.100', 'gray.700');
+
   return (
     <Section title="Events">
       <VStack alignItems="flex-start">
         {slices.length === 0 && <Text>No events yet.</Text>}
         {slices.sort(sortByStartTime).map((slice) => {
+          const ft = dayjs(`2000-01-01 ${slice.start}`);
+          const tt = dayjs(`2000-01-01 ${slice.end}`);
+          const mins = tt.diff(ft, 'minutes', true);
+          const totalHours = Math.floor(mins / 60);
+          const totalMins = dayjs().minute(mins).minute();
+
+          const difference = dayjs(slice.start).diff(dayjs(slice.end));
+          const duration = dayjs.duration(difference, 'hours');
+
           return (
             <Flex
               key={slice.id}
-              bgColor="gray.100"
+              bgColor={bgColor}
               px={4}
               py={2}
               borderRadius={8}
@@ -31,15 +52,31 @@ export const ClockEventsSection = ({ pie, slices }: ClockEventsProps) => {
                 <Box
                   height="20px"
                   width="20px"
+                  minHeight="20px"
+                  minWidth="20px"
                   bgColor={slice.color || ''}
                   mr={2}
+                  borderWidth={isDark ? '2px' : 0}
+                  borderColor="white"
                 />
-                <Text>{slice.name}</Text>
+                <Text mr={4}>{slice.name}</Text>
               </Flex>
-              <Flex align="center">
-                <Text mr={4}>
-                  {slice.start} to {slice.end}
-                </Text>
+              <Flex align="center" gap={4}>
+                <Box textAlign="end">
+                  <Text whiteSpace="nowrap">
+                    {slice.start} to {slice.end}
+                  </Text>
+                  <Text whiteSpace="nowrap" fontSize="0.75rem">
+                    {totalHours
+                      ? `${totalHours} hour${totalHours !== 1 ? 's' : ''}`
+                      : ''}
+                    {totalMins
+                      ? `${totalHours > 0 ? ' and ' : ''} ${totalMins} minute${
+                          totalMins !== 1 ? 's' : ''
+                        }`
+                      : ''}
+                  </Text>
+                </Box>
                 <HStack>
                   <EditSliceButton slice={slice} pie={pie} />
                   <DeleteSliceButton slice={slice} />

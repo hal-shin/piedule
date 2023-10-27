@@ -1,13 +1,14 @@
+import '@/libs/dayjs';
+import '@/styles/globals.css';
+import { ChakraProvider, Flex } from '@chakra-ui/react';
 import { type Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
 import { type AppType } from 'next/app';
-import { api } from '@/utils/api';
-import '@/styles/globals.css';
-import { ChakraProvider, Flex } from '@chakra-ui/react';
 import { Footer } from '@/components/Layout/Footer';
 import { Navbar } from '@/components/Layout/Navbar';
 import { NAVBAR_HEIGHT } from '@/constants';
 import { theme } from '@/theme';
+import { api } from '@/utils/api';
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,

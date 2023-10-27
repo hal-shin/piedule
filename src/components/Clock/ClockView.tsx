@@ -1,6 +1,7 @@
-import { Text } from '@chakra-ui/react';
+import { Text, VStack } from '@chakra-ui/react';
 import { Pie, Slice } from '@prisma/client';
 import React from 'react';
+import { ClockSettingsSection } from '@/components/Clock/ClockSettingsSection';
 import { Container } from '@/components/Container';
 import { Loading } from '@/components/Loading';
 import { api } from '@/utils/api';
@@ -23,10 +24,13 @@ export const ClockView = ({ pie }: ClockViewProps) => {
       <Container>
         <Text color="gray.500">{pie.description}</Text>
       </Container>
-      <Clock name={pie.name} data={slices.data} />
+      <Clock pie={pie} data={slices.data} />
       <Container>
-        {slices.data && <ClockEventsSection pie={pie} slices={slices.data} />}
-        <ClockActionsSection pie={pie} slices={slices.data} />
+        <VStack align="stretch" gap={12}>
+          {slices.data && <ClockEventsSection pie={pie} slices={slices.data} />}
+          <ClockActionsSection pie={pie} slices={slices.data} />
+          <ClockSettingsSection pie={pie} />
+        </VStack>
       </Container>
     </>
   );

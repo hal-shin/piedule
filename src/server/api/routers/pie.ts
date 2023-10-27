@@ -111,7 +111,7 @@ export const pieRouter = createTRPCRouter({
     }),
 
   updateSettings: protectedProcedure
-    .input(updatePieInput)
+    .input(updatePieSettingsInput)
     .mutation(async ({ ctx, input }) => {
       const { id, ...updateData } = input;
 

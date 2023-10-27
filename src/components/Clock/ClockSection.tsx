@@ -8,7 +8,7 @@ interface SectionProps {
 
 export const Section = ({ title, children }: SectionProps) => {
   return (
-    <Box mb={4}>
+    <Box>
       <Heading size="md" mb={4}>
         {title}
       </Heading>

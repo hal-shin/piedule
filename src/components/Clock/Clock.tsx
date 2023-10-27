@@ -1,5 +1,5 @@
-import { Flex } from '@chakra-ui/react';
-import { type Slice } from '@prisma/client';
+import { Flex, useColorMode } from '@chakra-ui/react';
+import { Pie as PieType, type Slice } from '@prisma/client';
 import React, { useCallback, useMemo } from 'react';
 import {
   Cell,
@@ -16,7 +16,6 @@ import {
   sortByStartTime,
 } from '@/utils/time';
 
-const UNSCHEDULED_COLOR = 'lightgray';
 const RADIAN = Math.PI / 180;
 const PIE_CONFIG = {
   startAngle: 90,
@@ -26,18 +25,22 @@ const PIE_CONFIG = {
 };
 
 interface ClockProps {
-  name: string;
+  pie: PieType;
   data: Array<Slice>;
-  size?: number;
 }
 
-export const Clock = ({ data, name }: ClockProps) => {
+export const Clock = ({ data, pie }: ClockProps) => {
+  const { colorMode } = useColorMode();
+  const isDarkMode = colorMode === 'dark';
   const isLargerThan580 = useMediaQuery('(min-width: 580px)');
   const isLargerThan640 = useMediaQuery('(min-width: 640px)');
+  const UNSCHEDULED_COLOR = isDarkMode ? '#484848' : 'lightgray';
+  const OUTER_RING_COLOR = isDarkMode ? '#1D4044' : '#82ca9d';
+
   const createBlank = (duration: number) => {
     return {
       value: duration,
-      name: 'Unscheduled',
+      name: pie.showUnscheduled ? 'Unscheduled' : '',
       color: UNSCHEDULED_COLOR,
     };
   };
@@ -71,7 +74,7 @@ export const Clock = ({ data, name }: ClockProps) => {
       <text
         x={x}
         y={y}
-        fill="black"
+        fill={isDarkMode ? 'white' : 'black'}
         textAnchor={isSideValue ? (x > cx ? 'start' : 'end') : 'middle'}
         dominantBaseline={
           isSideValue ? 'central' : isBottomValue ? 'hanging' : 'text-bottom'
@@ -154,7 +157,7 @@ export const Clock = ({ data, name }: ClockProps) => {
     }
 
     return output;
-  }, [data]);
+  }, [data, colorMode, pie.showUnscheduled]);
 
   return (
     <Flex width={{ base: '95%', lg: '80%', xl: 1020 }} marginX="auto">
@@ -170,7 +173,13 @@ export const Clock = ({ data, name }: ClockProps) => {
             label={renderCustomizedLabel}
             labelLine={false}
           >
-            <Label value={name} position="center" />
+            <Label
+              style={{
+                fill: isDarkMode ? 'white' : '',
+              }}
+              value={pie.name}
+              position="center"
+            />
             {dataWithBlanks.map((entry, index) => (
               <Cell key={`cell-${index}`} cursor="pointer" fill={entry.color} />
             ))}
@@ -187,7 +196,7 @@ export const Clock = ({ data, name }: ClockProps) => {
             dataKey="value"
             innerRadius="84%"
             outerRadius="87%"
-            fill="#82ca9d"
+            fill={OUTER_RING_COLOR}
             labelLine={false}
             label={renderClockLabel}
           />

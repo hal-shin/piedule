@@ -1,4 +1,11 @@
-import { Box, Flex, Heading, IconButton, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Flex,
+  Heading,
+  IconButton,
+  Text,
+  useColorModeValue,
+} from '@chakra-ui/react';
 import React from 'react';
 import { FaGithub } from 'react-icons/fa6';
 import { Container } from '@/components/Container';
@@ -7,9 +14,11 @@ import { APP_NAME, GITHUB_LINK, NAVBAR_HEIGHT } from '@/constants';
 interface FooterProps {}
 
 export const Footer = ({}: FooterProps) => {
+  const bgColor = useColorModeValue('blue.50', 'blue.700');
+
   return (
     <Container
-      bgColor="blue.50"
+      bgColor={bgColor}
       minHeight={NAVBAR_HEIGHT + 'px'}
       display="flex"
       borderTopRadius={8}

@@ -2,6 +2,7 @@ import { Link } from '@chakra-ui/next-js';
 import {
   Box,
   Button,
+  Flex,
   Heading,
   Tab,
   TabList,
@@ -29,9 +30,24 @@ export default function Dashboard() {
     <Box width="100%" mt={8}>
       <Tabs variant="soft-rounded" colorScheme="green" index={pieIndex}>
         <Container>
-          <Heading size="md" mb={2}>
-            Schedules
-          </Heading>
+          <Flex mb={2}>
+            <Heading size="md" flex={1}>
+              Schedules
+            </Heading>
+            <Button
+              as={Link}
+              href="/schedules/create"
+              variant="ghost"
+              style={{ textDecoration: 'none' }}
+              minW="108px"
+              position="sticky"
+              right={0}
+              ml={pies.data?.length ? 2 : 0}
+            >
+              + Add New
+            </Button>
+          </Flex>
+
           <TabList overflowX="auto" position="relative" py={2}>
             {pies.data?.map((pie) => (
               <Tab
@@ -49,19 +65,6 @@ export default function Dashboard() {
                 {pie.name}
               </Tab>
             ))}
-            <Button
-              as={Link}
-              href="/schedules/create"
-              variant="ghost"
-              style={{ textDecoration: 'none' }}
-              minW="108px"
-              position="sticky"
-              right={0}
-              bgColor="white"
-              ml={pies.data?.length ? 2 : 0}
-            >
-              + Add New
-            </Button>
           </TabList>
         </Container>
         <TabPanels>
