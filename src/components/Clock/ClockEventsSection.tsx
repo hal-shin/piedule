@@ -35,9 +35,6 @@ export const ClockEventsSection = ({ pie, slices }: ClockEventsProps) => {
           const totalHours = Math.floor(mins / 60);
           const totalMins = dayjs().minute(mins).minute();
 
-          const difference = dayjs(slice.start).diff(dayjs(slice.end));
-          const duration = dayjs.duration(difference, 'hours');
-
           return (
             <Flex
               key={slice.id}

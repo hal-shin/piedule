@@ -13,10 +13,7 @@ interface ClockActionsSectionProps {
   slices: Array<Slice>;
 }
 
-export const ClockActionsSection = ({
-  pie,
-  slices,
-}: ClockActionsSectionProps) => {
+export const ClockActionsSection = ({ pie }: ClockActionsSectionProps) => {
   const router = useRouter();
 
   return (
