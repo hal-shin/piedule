@@ -30,7 +30,7 @@ export default function Dashboard() {
     <Box width="100%" mt={8}>
       <Tabs variant="soft-rounded" colorScheme="green" index={pieIndex}>
         <Container>
-          <Flex mb={2}>
+          <Flex mb={2} align="center">
             <Heading size="md" flex={1}>
               Schedules
             </Heading>
@@ -39,16 +39,12 @@ export default function Dashboard() {
               href="/schedules/create"
               variant="ghost"
               style={{ textDecoration: 'none' }}
-              minW="108px"
-              position="sticky"
-              right={0}
-              ml={pies.data?.length ? 2 : 0}
             >
               + Add New
             </Button>
           </Flex>
 
-          <TabList overflowX="auto" position="relative" py={2}>
+          <TabList position="relative" overflow="auto">
             {pies.data?.map((pie) => (
               <Tab
                 key={`pie-tab-${pie.id}`}

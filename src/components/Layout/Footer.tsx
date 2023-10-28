@@ -5,7 +5,9 @@ import {
   IconButton,
   Text,
   useColorModeValue,
+  VStack,
 } from '@chakra-ui/react';
+import dayjs from 'dayjs';
 import React from 'react';
 import { FaGithub } from 'react-icons/fa6';
 import { Container } from '@/components/Container';
@@ -20,31 +22,33 @@ export const Footer = ({}: FooterProps) => {
     <Container
       bgColor={bgColor}
       minHeight={NAVBAR_HEIGHT + 'px'}
-      display="flex"
       borderTopRadius={8}
       mt={16}
       px={4}
-      py={6}
+      py={4}
     >
-      <Box flex={1} alignItems="flex-start">
-        <Heading size="md">{APP_NAME}</Heading>
-        <IconButton
-          as={'a'}
-          aria-label="GitHub"
-          icon={<FaGithub />}
-          href={GITHUB_LINK}
-          variant="ghost"
-          fontSize="22px"
-          colorScheme="alphaWhite"
-          mx={0}
-        />
-      </Box>
-      <Box flex={2}>
-        <Text>
-          {APP_NAME} is a planner app that helps you visualize your entire day
-          on a 24-hour clock.
-        </Text>
-      </Box>
+      <Flex>
+        <Box flex={1} alignItems="flex-start">
+          <Heading size="md">{APP_NAME}</Heading>
+          <IconButton
+            as={'a'}
+            aria-label="GitHub"
+            icon={<FaGithub />}
+            href={GITHUB_LINK}
+            variant="ghost"
+            fontSize="22px"
+            colorScheme="alphaWhite"
+            mx={0}
+          />
+        </Box>
+        <VStack flex={2} align="stretch">
+          <Text>
+            {APP_NAME} is a planner app that helps you visualize your entire day
+            on a 24-hour clock.
+          </Text>
+          <Text>© {dayjs().year()} Hal Shin. All rights reserved.</Text>
+        </VStack>
+      </Flex>
     </Container>
   );
 };
