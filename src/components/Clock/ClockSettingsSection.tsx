@@ -19,7 +19,7 @@ export const ClockSettingsSection = ({ pie }: ClockSettingsSectionProps) => {
   const HideUnscheduledOption = () => {
     return (
       <SettingsItem
-        title="Hide Unscheduled Label"
+        title="Hide unscheduled labels"
         description="For a cleaner visual"
       >
         <Switch

@@ -1,4 +1,11 @@
-import { Button, Flex, Heading, useColorModeValue } from '@chakra-ui/react';
+import { Link } from '@chakra-ui/next-js';
+import {
+  Button,
+  Flex,
+  Heading,
+  HStack,
+  useColorModeValue,
+} from '@chakra-ui/react';
 import { signIn, useSession } from 'next-auth/react';
 import React from 'react';
 import { Container } from '@/components/Container';
@@ -41,6 +48,16 @@ export const Navbar = ({}: NavbarProps) => {
         >
           {APP_NAME}
         </Heading>
+        <HStack flex={1} ml={8}>
+          <Button
+            as={Link}
+            href={`/schedules`}
+            style={{ textDecoration: 'none' }}
+            variant="link"
+          >
+            My Schedules
+          </Button>
+        </HStack>
         <Flex gap={4}>
           {!isAuthenticated ? (
             <Button

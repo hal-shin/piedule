@@ -1,6 +1,6 @@
 import '@/libs/dayjs';
 import '@/styles/globals.css';
-import { ChakraProvider, Flex } from '@chakra-ui/react';
+import { Box, ChakraProvider, Flex } from '@chakra-ui/react';
 import { type Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
 import { type AppType } from 'next/app';
@@ -17,11 +17,13 @@ const MyApp: AppType<{ session: Session | null }> = ({
   return (
     <SessionProvider session={session}>
       <ChakraProvider theme={theme}>
-        <Navbar />
-        <Flex as="main" minHeight="100vh" pt={NAVBAR_HEIGHT + 'px'}>
-          <Component {...pageProps} />
+        <Flex minHeight="100vh" flexDir="column" align="stretch">
+          <Navbar />
+          <Flex as="main" pt={NAVBAR_HEIGHT + 'px'} flex={1}>
+            <Component {...pageProps} />
+          </Flex>
+          <Footer />
         </Flex>
-        <Footer />
       </ChakraProvider>
     </SessionProvider>
   );

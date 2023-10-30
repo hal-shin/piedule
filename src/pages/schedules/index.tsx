@@ -9,9 +9,10 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
+  Text,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ClockView } from '@/components/Clock/ClockView';
 import { Container } from '@/components/Container';
 import { Loading } from '@/components/Loading';
@@ -24,7 +25,23 @@ export default function Dashboard() {
   const selectedSlug = router.query.slug as string;
   const pieIndex = pies.data?.findIndex((pie) => pie.slug === selectedSlug);
 
-  if (pies.isLoading) return <Loading />;
+  useEffect(() => {
+    if (!router.query.slug && pies.data && pies.data[0]) {
+      void router.push({
+        pathname: '/schedules',
+        query: {
+          slug: pies.data[0].slug,
+        },
+      });
+    }
+  }, [router.query.slug]);
+
+  if (pies.isLoading)
+    return (
+      <Flex justify="center" width="100%" mt={4}>
+        <Loading />
+      </Flex>
+    );
 
   return (
     <Box width="100%" mt={8}>
@@ -45,6 +62,9 @@ export default function Dashboard() {
           </Flex>
 
           <TabList position="relative" overflow="auto">
+            {pies.data?.length === 0 && (
+              <Text>You don't have any schedules yet. Please create one!</Text>
+            )}
             {pies.data?.map((pie) => (
               <Tab
                 key={`pie-tab-${pie.id}`}
