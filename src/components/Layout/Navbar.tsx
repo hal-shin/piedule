@@ -41,6 +41,8 @@ export const Navbar = ({}: NavbarProps) => {
         boxShadow="sm"
       >
         <Heading
+          as={Link}
+          href="/"
           bgGradient="linear(to-l, #7928CA, #FF0080)"
           bgClip="text"
           fontWeight="extrabold"
