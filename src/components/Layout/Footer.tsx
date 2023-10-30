@@ -20,6 +20,7 @@ export const Footer = ({}: FooterProps) => {
 
   return (
     <Container
+      as="footer"
       bgColor={bgColor}
       minHeight={NAVBAR_HEIGHT + 'px'}
       borderTopRadius={8}

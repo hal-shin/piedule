@@ -19,7 +19,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
       <ChakraProvider theme={theme}>
         <Flex minHeight="100vh" flexDir="column" align="stretch">
           <Navbar />
-          <Flex as="main" pt={NAVBAR_HEIGHT + 'px'} flex={1}>
+          <Flex as="main" pt={NAVBAR_HEIGHT + 'px'} flex={1} overflowX="hidden">
             <Component {...pageProps} />
           </Flex>
           <Footer />
