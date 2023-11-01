@@ -4,6 +4,7 @@ import { Button, ButtonProps, HStack } from '@chakra-ui/react';
 import { Pie, Slice } from '@prisma/client';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { DeleteClockButton } from '@/components/Clock/DeleteClockButton';
 import { Section } from './ClockSection';
 
 const BUTTON_SIZE: ButtonProps['size'] = 'md';
@@ -46,14 +47,7 @@ export const ClockActionsSection = ({ pie }: ClockActionsSectionProps) => {
         >
           Edit Schedule
         </Button>
-        <Button
-          colorScheme="red"
-          variant="solid"
-          leftIcon={<DeleteIcon />}
-          size={BUTTON_SIZE}
-        >
-          Delete Schedule
-        </Button>
+        <DeleteClockButton pie={pie} />
       </HStack>
     </Section>
   );
