@@ -182,7 +182,7 @@ export const Clock = ({ data, name, settings, ...rest }: ClockProps) => {
               position="center"
             />
             {dataWithBlanks.map((entry, index) => (
-              <Cell key={`cell-${index}`} cursor="pointer" fill={entry.color} />
+              <Cell key={`cell-${index}`} fill={entry.color} />
             ))}
             <Tooltip cursor={false} />
           </Pie>
