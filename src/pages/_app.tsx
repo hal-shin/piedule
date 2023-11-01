@@ -1,6 +1,5 @@
 import '@/libs/dayjs';
-import '@/styles/globals.css';
-import { Box, ChakraProvider, Flex } from '@chakra-ui/react';
+import { ChakraProvider, Flex } from '@chakra-ui/react';
 import { type Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
 import { type AppType } from 'next/app';

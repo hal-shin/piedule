@@ -1,6 +1,6 @@
 import { EditIcon } from '@chakra-ui/icons';
 import { IconButton } from '@chakra-ui/react';
-import { Pie, Slice } from '@prisma/client';
+import { type Pie, type Slice } from '@prisma/client';
 import { useRouter } from 'next/router';
 import React from 'react';
 

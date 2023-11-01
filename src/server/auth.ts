@@ -5,10 +5,10 @@ import {
   type DefaultSession,
   type NextAuthOptions,
 } from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
 import DiscordProvider from 'next-auth/providers/discord';
 import { env } from '@/env.mjs';
 import { db } from '@/server/db';
+
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`

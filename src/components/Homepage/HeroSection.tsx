@@ -6,11 +6,10 @@ import {
   Flex,
   Heading,
   Icon,
-  IconProps,
-  Image,
   Stack,
   Text,
   useColorModeValue,
+  type IconProps,
 } from '@chakra-ui/react';
 import { signIn } from 'next-auth/react';
 import { Clock } from '@/components/Clock';

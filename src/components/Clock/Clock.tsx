@@ -1,5 +1,5 @@
-import { Flex, FlexProps, useColorMode } from '@chakra-ui/react';
-import { Pie as PieType, type Slice } from '@prisma/client';
+import { Flex, useColorMode, type FlexProps } from '@chakra-ui/react';
+import { type Pie as PieType, type Slice } from '@prisma/client';
 import React, { useCallback, useMemo } from 'react';
 import {
   Cell,
@@ -119,7 +119,7 @@ export const Clock = ({ data, name, settings, ...rest }: ClockProps) => {
         </text>
       );
     },
-    [],
+    [isLargerThan640],
   );
 
   const dataWithBlanks = useMemo(() => {
@@ -158,7 +158,9 @@ export const Clock = ({ data, name, settings, ...rest }: ClockProps) => {
     }
 
     return output;
-  }, [data, colorMode, settings.showUnscheduled]);
+
+    // eslint-disable-next-line
+  }, [data, colorMode, settings.showUnscheduled, createBlank]);
 
   return (
     <Flex width={{ base: '95%', lg: '80%', xl: 1020 }} marginX="auto" {...rest}>
@@ -182,7 +184,7 @@ export const Clock = ({ data, name, settings, ...rest }: ClockProps) => {
               position="center"
             />
             {dataWithBlanks.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={entry.color} />
+              <Cell key={`cell-${index}`} fill={entry.color!} />
             ))}
             <Tooltip cursor={false} />
           </Pie>

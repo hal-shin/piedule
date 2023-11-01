@@ -1,5 +1,5 @@
 import { Text, VStack } from '@chakra-ui/react';
-import { Pie, Slice } from '@prisma/client';
+import { type Pie, type Slice } from '@prisma/client';
 import React from 'react';
 import { ClockSettingsSection } from '@/components/Clock/ClockSettingsSection';
 import { Container } from '@/components/Container';

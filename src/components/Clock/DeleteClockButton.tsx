@@ -7,10 +7,10 @@ import {
   AlertDialogHeader,
   AlertDialogOverlay,
   Button,
-  ButtonProps,
   useDisclosure,
+  type ButtonProps,
 } from '@chakra-ui/react';
-import { Pie } from '@prisma/client';
+import { type Pie } from '@prisma/client';
 import { useRouter } from 'next/router';
 import React, { useRef } from 'react';
 import { api } from '@/utils/api';
@@ -35,7 +35,7 @@ export const DeleteClockButton = ({ pie }: DeleteClockButtonProps) => {
 
   const handleConfirm = () => {
     deletePie.mutate({ id: pie.id });
-    router.push('/schedules');
+    void router.push('/schedules');
     onClose();
   };
 
@@ -62,7 +62,7 @@ export const DeleteClockButton = ({ pie }: DeleteClockButtonProps) => {
             </AlertDialogHeader>
 
             <AlertDialogBody>
-              Are you sure? You can't undo this action afterwards.
+              Are you sure? You can&apos;t undo this action afterwards.
             </AlertDialogBody>
 
             <AlertDialogFooter>

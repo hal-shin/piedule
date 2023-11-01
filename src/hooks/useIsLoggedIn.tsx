@@ -1,4 +1,3 @@
-import { useColorMode } from '@chakra-ui/react';
 import { useSession } from 'next-auth/react';
 
 interface UseIsLoggedInProps {}

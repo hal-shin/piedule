@@ -1,5 +1,4 @@
 import {
-  As,
   Box,
   Card,
   CardBody,
@@ -8,15 +7,12 @@ import {
   Icon,
   SimpleGrid,
   Text,
+  type As,
 } from '@chakra-ui/react';
 import React from 'react';
 import {
-  HiListBullet,
   HiMiniChartPie,
-  HiMiniListBullet,
   HiMiniPaintBrush,
-  HiOutlineListBullet,
-  HiQueueList,
   HiSquare3Stack3D,
 } from 'react-icons/hi2';
 import { Section } from '@/components/Homepage/Section';

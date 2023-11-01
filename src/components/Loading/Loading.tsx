@@ -1,4 +1,4 @@
-import { Spinner, SpinnerProps } from '@chakra-ui/react';
+import { Spinner, type SpinnerProps } from '@chakra-ui/react';
 import React from 'react';
 
 interface LoadingProps extends SpinnerProps {}

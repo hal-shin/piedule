@@ -1,7 +1,7 @@
-import { AddIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
+import { AddIcon, EditIcon } from '@chakra-ui/icons';
 import { Link } from '@chakra-ui/next-js';
-import { Button, ButtonProps, HStack } from '@chakra-ui/react';
-import { Pie, Slice } from '@prisma/client';
+import { Button, HStack, type ButtonProps } from '@chakra-ui/react';
+import { type Pie, type Slice } from '@prisma/client';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { DeleteClockButton } from '@/components/Clock/DeleteClockButton';

@@ -1,4 +1,4 @@
-import { Container, ContainerProps, Flex, FlexProps } from '@chakra-ui/react';
+import { Container, type ContainerProps, Flex, type FlexProps } from '@chakra-ui/react';
 import React from 'react';
 
 interface SectionProps extends FlexProps {

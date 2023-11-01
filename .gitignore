@@ -44,3 +44,6 @@ yarn-error.log*
 # IDEs
 .vscode/
 .idea/
+
+# Sentry Config File
+.sentryclirc

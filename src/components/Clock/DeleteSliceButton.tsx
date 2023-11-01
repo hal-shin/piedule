@@ -10,7 +10,7 @@ import {
   IconButton,
   useDisclosure,
 } from '@chakra-ui/react';
-import { Slice } from '@prisma/client';
+import { type Slice } from '@prisma/client';
 import React, { useRef } from 'react';
 import { api } from '@/utils/api';
 
@@ -59,7 +59,7 @@ export const DeleteSliceButton = ({ slice }: DeleteSliceButtonProps) => {
             </AlertDialogHeader>
 
             <AlertDialogBody>
-              Are you sure? You can't undo this action afterwards.
+              Are you sure? You can&apos;t undo this action afterwards.
             </AlertDialogBody>
 
             <AlertDialogFooter>

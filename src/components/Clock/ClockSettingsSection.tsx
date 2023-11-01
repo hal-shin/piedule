@@ -1,5 +1,5 @@
 import { Box, Flex, Switch, Text, VStack } from '@chakra-ui/react';
-import { Pie } from '@prisma/client';
+import { type Pie } from '@prisma/client';
 import React from 'react';
 import { api } from '@/utils/api';
 import { Section } from './ClockSection';

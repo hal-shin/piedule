@@ -1,4 +1,4 @@
-import { Slice } from '@prisma/client';
+import type { Slice } from '@prisma/client';
 
 export const convertTimeToNum = (time: string) => {
   const hour = time.split(':')[0];

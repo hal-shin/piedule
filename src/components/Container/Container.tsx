@@ -1,6 +1,6 @@
 import {
   Container as ChakraContainer,
-  ContainerProps as ChakraContainerProps,
+  type ContainerProps as ChakraContainerProps,
 } from '@chakra-ui/react';
 import React from 'react';
 

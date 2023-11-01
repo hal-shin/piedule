@@ -34,6 +34,8 @@ export default function Dashboard() {
         },
       });
     }
+
+    // eslint-disable-next-line
   }, [router.query.slug]);
 
   if (pies.isLoading)
@@ -63,7 +65,9 @@ export default function Dashboard() {
 
           <TabList position="relative" overflow="auto">
             {pies.data?.length === 0 && (
-              <Text>You don't have any schedules yet. Please create one!</Text>
+              <Text>
+                You don&apos;t have any schedules yet. Please create one!
+              </Text>
             )}
             {pies.data?.map((pie) => (
               <Tab

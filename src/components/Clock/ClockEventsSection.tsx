@@ -6,7 +6,7 @@ import {
   useColorModeValue,
   VStack,
 } from '@chakra-ui/react';
-import { Pie, Slice } from '@prisma/client';
+import { type Pie, type Slice } from '@prisma/client';
 import dayjs from 'dayjs';
 import React from 'react';
 import { useIsDarkMode } from '@/hooks/useIsDarkMode';
@@ -51,7 +51,7 @@ export const ClockEventsSection = ({ pie, slices }: ClockEventsProps) => {
                   width="20px"
                   minHeight="20px"
                   minWidth="20px"
-                  bgColor={slice.color || ''}
+                  bgColor={slice.color ?? ''}
                   mr={2}
                   borderWidth={isDark ? '2px' : 0}
                   borderColor="white"
