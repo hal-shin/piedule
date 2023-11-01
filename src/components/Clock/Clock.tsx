@@ -1,4 +1,4 @@
-import { Flex, useColorMode } from '@chakra-ui/react';
+import { Flex, FlexProps, useColorMode } from '@chakra-ui/react';
 import { Pie as PieType, type Slice } from '@prisma/client';
 import React, { useCallback, useMemo } from 'react';
 import {
@@ -24,12 +24,13 @@ const PIE_CONFIG = {
   cy: '50%',
 };
 
-interface ClockProps {
-  pie: PieType;
-  data: Array<Slice>;
+interface ClockProps extends FlexProps {
+  name: string;
+  settings: Pick<PieType, 'showUnscheduled'>;
+  data: Array<Pick<Slice, 'name' | 'start' | 'end' | 'color'>>;
 }
 
-export const Clock = ({ data, pie }: ClockProps) => {
+export const Clock = ({ data, name, settings, ...rest }: ClockProps) => {
   const { colorMode } = useColorMode();
   const isDarkMode = colorMode === 'dark';
   const isLargerThan580 = useMediaQuery('(min-width: 580px)');
@@ -40,7 +41,7 @@ export const Clock = ({ data, pie }: ClockProps) => {
   const createBlank = (duration: number) => {
     return {
       value: duration,
-      name: pie.showUnscheduled ? 'Unscheduled' : '',
+      name: settings.showUnscheduled ? 'Unscheduled' : '',
       color: UNSCHEDULED_COLOR,
     };
   };
@@ -157,10 +158,10 @@ export const Clock = ({ data, pie }: ClockProps) => {
     }
 
     return output;
-  }, [data, colorMode, pie.showUnscheduled]);
+  }, [data, colorMode, settings.showUnscheduled]);
 
   return (
-    <Flex width={{ base: '95%', lg: '80%', xl: 1020 }} marginX="auto">
+    <Flex width={{ base: '95%', lg: '80%', xl: 1020 }} marginX="auto" {...rest}>
       <ResponsiveContainer aspect={1} width="100%">
         <PieChart>
           <Pie
@@ -177,7 +178,7 @@ export const Clock = ({ data, pie }: ClockProps) => {
               style={{
                 fill: isDarkMode ? 'white' : '',
               }}
-              value={pie.name}
+              value={name}
               position="center"
             />
             {dataWithBlanks.map((entry, index) => (

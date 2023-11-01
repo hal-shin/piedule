@@ -24,7 +24,13 @@ export const ClockView = ({ pie }: ClockViewProps) => {
       <Container>
         <Text color="gray.500">{pie.description}</Text>
       </Container>
-      <Clock pie={pie} data={slices.data} />
+      <Clock
+        name={pie.name}
+        data={slices.data}
+        settings={{
+          showUnscheduled: pie.showUnscheduled,
+        }}
+      />
       <Container>
         <VStack align="stretch" gap={12}>
           {slices.data && <ClockEventsSection pie={pie} slices={slices.data} />}

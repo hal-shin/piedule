@@ -17,7 +17,10 @@ export const convertNumToTime = (num: number) => {
   return num.toString().padStart(2, '0') + ':00';
 };
 
-export const sortByStartTime = (a: Slice, b: Slice) => {
+export const sortByStartTime = (
+  a: Pick<Slice, 'start' | 'end'>,
+  b: Pick<Slice, 'start' | 'end'>,
+) => {
   const aNum = convertTimeToNum(a.start);
   const bNum = convertTimeToNum(b.start);
 
